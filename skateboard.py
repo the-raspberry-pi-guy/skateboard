@@ -87,7 +87,7 @@ class Skateboard(object):
 
 		if (self.buttons & cwiid.BTN_B):
 			self.speed = 1500
-			time.sleep(3)
+			time.sleep(0.5)
 		if (self.buttons & cwiid.BTN_DOWN):
 			self.speed += 1
 		if (self.buttons & cwiid.BTN_UP):
