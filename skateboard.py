@@ -80,6 +80,9 @@ class Skateboard(object):
 		pi.write(self.led, 1)
 		self.get_status()
 		if self.status_button:
+			self.wii.rumble=1
+			time.sleep(2)
+			self.wii.rumble=0
 			raise RuntimeError("Status Button")
 
 		if (self.buttons & cwiid.BTN_B):
