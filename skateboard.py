@@ -1,6 +1,10 @@
 # skateboard.py
 # DIY Electric Skateboard
 # Created by Matthew Timmons-Brown, The Raspberry Pi Guy
+# Matt's safety procedures were designed and coded by Simon Beal.
+# If I die, it is his fault
+# Simon accepts no responsibility for any damage caused by the use of this program
+# to the extent allowed by UK law
 
 import pigpio
 import time
@@ -28,10 +32,10 @@ class Skateboard(object):
 	accel_sleep = 0.001
 	
 	def __init__(self):
-		pi.set_PWM_frequency(self.motor,50)
-		pi.set_mode(self.led,pigpio.OUTPUT)
-		pi.set_mode(self.button,pigpio.INPUT)
-		pi.set_pull_up_down(self.button, pigpio.PUD_UP)
+		pi.set_PWM_frequency(Skateboard.motor, 50)
+		pi.set_mode(Skateboard.led, pigpio.OUTPUT)
+		pi.set_mode(Skateboard.button, pigpio.INPUT)
+		pi.set_pull_up_down(Skateboard.button, pigpio.PUD_UP)
 		self.__speed = 1500
 		self.speed=1500
 
@@ -76,6 +80,8 @@ class Skateboard(object):
 	def run_process(self):
 		pi.write(self.led, 1)
 		self.get_status()
+		if self.status_button:
+			raise RuntimeError("Status Button")
 
 		if (self.buttons & cwiid.BTN_B):
 			self.speed = 1500
@@ -88,6 +94,8 @@ class Skateboard(object):
 	@timeout(0.4)
 	def get_status(self):
 		self.buttons = self.wii.state['buttons']
+		self.status_button = not pi.read(Skateboard.button)
+
 	
 ### Main Program ###
 
