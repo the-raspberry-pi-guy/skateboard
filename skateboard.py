@@ -62,8 +62,12 @@ class Skateboard:
 			speed=1000
 		if speed>1720:
 			speed=1720
+		return speed
 
 ### Main Program ###
 
 skate = Skateboard()
+skate.blinky(35,0.05)
 skate.connection_process()
+while True:
+	pi.set_servo_pulsewidth(18,skate.run_process)
