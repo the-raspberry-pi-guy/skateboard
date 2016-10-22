@@ -8,18 +8,42 @@ import cwiid
 
 pi = pigpio.pi()
 
-class Skateboard:
+class Skateboard(object):
 	"""An all-powerful skateboard controller"""
 	motor = 18
 	led = 17
 	button = 27
+
+	min_speed = 1720
+	max_speed = 1100
+
+	servo_smooth = 2
+	smooth_sleep = 0.005
+	accel_sleep = 0.002
 	
 	def __init__(self):
 		pi.set_PWM_frequency(self.motor,50)
 		pi.set_mode(self.led,pigpio.OUTPUT)
 		pi.set_mode(self.button,pigpio.INPUT)
 		pi.set_pull_up_down(self.button, pigpio.PUD_UP)
+		self.__speed = 1500
 		self.speed=1500
+
+	@property
+	def speed(self):
+		return self.__speed
+
+	@speed.setter
+	def speed(self, value):
+		value = max(min(value, Skateboard.min_speed), Skateboard.max_speed)
+		while abs(value-self.__speed) > Skateboard.servo_smooth:
+			direction = cmp(value, self.__speed)
+			self.__speed += direction * Skateboard.servo_smooth
+			pi.set_servo_pulsewidth(Skateboard.motor, self.__speed)
+			time.sleep(Skateboard.smooth_sleep)
+		pi.set_servo_pulsewidth(Skateboard.motor, value)		
+		self.__speed = value
+		time.sleep(Skateboard.accel_sleep)
 
 	def blinky(self,times,period):
 		for i in range (1,times):
@@ -44,25 +68,16 @@ class Skateboard:
 				pass
 
 	def run_process(self):
-		pi.write(self.led,1)
+		pi.write(self.led, 1)
 		self.buttons = self.wii.state['buttons']
 
 		if (self.buttons & cwiid.BTN_B):
-			if self.speed>=1300:
-				self.speed=1500
-			elif self.speed < 1300:
-				for i in range(self.speed,1501,1):
-					self.speed=i
-					time.sleep(0.01)
-
+			self.speed = 1500
+			time.sleep(3)
 		if (self.buttons & cwiid.BTN_DOWN):
-			self.speed=self.speed+1
+			self.speed += 1
 		if (self.buttons & cwiid.BTN_UP):
-			self.speed=self.speed-1
-		if self.speed<1000:
-			self.speed=1000
-		if self.speed>1720:
-			self.speed=1720
+			self.speed -= 1
 
 ### Main Program ###
 
@@ -72,4 +87,3 @@ skate.connection_process()
 while True:
 	print(skate.speed)
 	skate.run_process()
-	pi.set_servo_pulsewidth(18,skate.speed)
