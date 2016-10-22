@@ -7,23 +7,24 @@ import time
 import cwiid
 
 class Skateboard:
+	"""An all-powerful skateboard controller"""
+	pi = pigpio.pi()
+	motor = 18
+	led = 17
+	button = 27
+	
 	def __init__(self):
-		self.pi = pigpio.pi()
-		self.motor = 18
-		self.led = 17
-		self.button = 27
-		
 		pi.set_PWM_frequency(motor,50)
 		pi.set_mode(led,pigpio.OUTPUT)
 		pi.set_mode(button,pigpio.INPUT)
 		pi.set_pull_up_down(button, pigpio.PUD_UP)
 
 	def blinky(self,times,period):
-		for i in range (1,times):
+		for i in range (1,self.times):
 			pi.write(led,1)
-			time.sleep(period)
+			time.sleep(self.period)
 			pi.write(led,0)
-			time.sleep(period)
+			time.sleep(self.period)
 
 	def connection_process(self):
 		connected = False
@@ -65,3 +66,5 @@ class Skateboard:
 			speed=1720
 
 		return speed
+
+### Main Program ###
