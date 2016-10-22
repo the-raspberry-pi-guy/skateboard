@@ -17,7 +17,6 @@ from timeout import timeout, TimeoutError
 pi = pigpio.pi()
 is_debug = "debug" in sys.argv
 
-
 class Skateboard(object):
 	"""An all-powerful skateboard controller"""
 	motor = 18
@@ -100,7 +99,7 @@ class Skateboard(object):
 ### Main Program ###
 
 skate = Skateboard()
-#skate.blinky(35,0.05)
+skate.blinky(20,0.05)
 skate.connection_process()
 while True:
 	try:
