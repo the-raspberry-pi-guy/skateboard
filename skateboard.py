@@ -18,6 +18,7 @@ class Skateboard:
 		pi.set_mode(led,pigpio.OUTPUT)
 		pi.set_mode(button,pigpio.INPUT)
 		pi.set_pull_up_down(button, pigpio.PUD_UP)
+		self.speed=1500
 
 	def blinky(self,times,period):
 		for i in range (1,self.times):
@@ -47,22 +48,21 @@ class Skateboard:
 		self.buttons = wii.state['buttons']
 
 		if (self.buttons & cwiid.BTN_B):
-			if speed>=1300:
-				speed=1500
-			elif speed < 1300:
-				for i in range(speed,1501,1):
-					speed=i
+			if self.speed>=1300:
+				self.speed=1500
+			elif self.speed < 1300:
+				for i in range(self.speed,1501,1):
+					self.speed=i
 					time.sleep(0.01)
 
 		if (self.buttons & cwiid.BTN_DOWN):
-			speed=speed+1
+			self.speed=self.speed+1
 		if (self.buttons & cwiid.BTN_UP):
-			speed=speed-1
-		if speed<1000:
-			speed=1000
-		if speed>1720:
-			speed=1720
-		return speed
+			self.speed=self.speed-1
+		if self.speed<1000:
+			self.speed=1000
+		if self.speed>1720:
+			self.speed=1720
 
 ### Main Program ###
 
@@ -70,4 +70,4 @@ skate = Skateboard()
 skate.blinky(35,0.05)
 skate.connection_process()
 while True:
-	pi.set_servo_pulsewidth(18,skate.run_process)
+	pi.set_servo_pulsewidth(18,skate.speed)
