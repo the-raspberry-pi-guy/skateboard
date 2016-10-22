@@ -1,5 +1,5 @@
 # skateboard.py
-# Library for DIY Electric Skateboard
+# DIY Electric Skateboard
 # Created by Matthew Timmons-Brown, The Raspberry Pi Guy
 
 import pigpio
@@ -29,12 +29,11 @@ class Skateboard:
 	def connection_process(self):
 		connected = False
 		while not connected:
-			blinky(5,0.4)
+			self.blinky(5,0.4)
 			try:
-				global wii
-				wii = cwiid.Wiimote(bdaddr="00:1F:C5:86:3E:85")
+				self.wii = cwiid.Wiimote(bdaddr="00:1F:C5:86:3E:85")
 				connected = True
-				blinky(40,0.03)
+				self.blinky(40,0.03)
 				wii.rpt_mode = cwiid.RPT_BTN
 				wii.rumble = 1
 				time.sleep(1)
@@ -45,10 +44,9 @@ class Skateboard:
 
 	def run_process(self):
 		pi.write(led,1)
-		global speed
-		buttons = wii.state['buttons']
+		self.buttons = wii.state['buttons']
 
-		if (buttons & cwiid.BTN_B):
+		if (self.buttons & cwiid.BTN_B):
 			if speed>=1300:
 				speed=1500
 			elif speed < 1300:
@@ -56,15 +54,16 @@ class Skateboard:
 					speed=i
 					time.sleep(0.01)
 
-		if (buttons & cwiid.BTN_DOWN):
+		if (self.buttons & cwiid.BTN_DOWN):
 			speed=speed+1
-		if (buttons & cwiid.BTN_UP):
+		if (self.buttons & cwiid.BTN_UP):
 			speed=speed-1
 		if speed<1000:
 			speed=1000
 		if speed>1720:
 			speed=1720
 
-		return speed
-
 ### Main Program ###
+
+skate = Skateboard()
+skate.connection_process()
