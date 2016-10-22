@@ -5,8 +5,14 @@
 import pigpio
 import time
 import cwiid
+import os
+import sys
+
+from timeout import timeout, TimeoutError
 
 pi = pigpio.pi()
+is_debug = "debug" in sys.argv
+
 
 class Skateboard(object):
 	"""An all-powerful skateboard controller"""
@@ -19,7 +25,7 @@ class Skateboard(object):
 
 	servo_smooth = 2
 	smooth_sleep = 0.005
-	accel_sleep = 0.002
+	accel_sleep = 0.001
 	
 	def __init__(self):
 		pi.set_PWM_frequency(self.motor,50)
@@ -69,7 +75,7 @@ class Skateboard(object):
 
 	def run_process(self):
 		pi.write(self.led, 1)
-		self.buttons = self.wii.state['buttons']
+		self.get_status()
 
 		if (self.buttons & cwiid.BTN_B):
 			self.speed = 1500
@@ -79,11 +85,24 @@ class Skateboard(object):
 		if (self.buttons & cwiid.BTN_UP):
 			self.speed -= 1
 
+	@timeout(0.4)
+	def get_status(self):
+		self.buttons = self.wii.state['buttons']
+	
 ### Main Program ###
 
 skate = Skateboard()
 #skate.blinky(35,0.05)
 skate.connection_process()
 while True:
-	print(skate.speed)
-	skate.run_process()
+	try:
+		skate.run_process()
+		print(skate.speed)
+	except KeyboardInterrupt:
+		raise
+	except:
+		skate.speed = 1500
+		if is_debug:
+			raise
+		else:
+			os.system("poweroff")
