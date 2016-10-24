@@ -28,7 +28,7 @@ class Skateboard(object):
 
 	servo_smooth = 2
 	smooth_sleep = 0.005
-	accel_sleep = 0.001
+	accel_sleep = 0.02
 	
 	def __init__(self):
 		pi.set_PWM_frequency(Skateboard.motor, 50)
@@ -92,6 +92,18 @@ class Skateboard(object):
 			self.speed += 1
 		if (self.buttons & cwiid.BTN_UP):
 			self.speed -= 1
+		if (self.buttons & cwiid.BTN_PLUS):
+			Skateboard.accel_sleep += 0.005
+			time.sleep(0.5)
+			if Skateboard.accel_sleep >= 0.1:
+				Skateboard.accel_sleep = 0.1
+			print(Skateboard.accel_sleep)
+		if (self.buttons & cwiid.BTN_MINUS):
+			Skateboard.accel_sleep -= 0.005
+			time.sleep(0.5)
+			if Skateboard.accel_sleep <= 0:
+				Skateboard.accel_sleep = 0
+			print(Skateboard.accel_sleep)
 
 	@timeout(0.4)
 	def get_status(self):
@@ -107,7 +119,7 @@ skate.connection_process()
 while True:
 	try:
 		skate.run_process()
-		print(skate.speed)
+#		print(skate.speed)
 	except KeyboardInterrupt:
 		raise
 	except:
