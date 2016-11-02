@@ -11,6 +11,7 @@ import time
 import cwiid
 import os
 import sys
+import logging
 
 from timeout import timeout, TimeoutError
 
@@ -30,7 +31,8 @@ class Skateboard(object):
 	smooth_sleep = 0.005
 	accel_sleep = 0.02
 	
-	def __init__(self):
+	def __init__(self, logger):
+		self.logger = logger
 		pi.set_PWM_frequency(Skateboard.motor, 50)
 		pi.set_mode(Skateboard.led, pigpio.OUTPUT)
 		pi.set_mode(Skateboard.button, pigpio.INPUT)
@@ -61,7 +63,7 @@ class Skateboard(object):
 			pi.write(self.led,0)
 			time.sleep(period)
 
-	def connection_process(self):
+	def connect_wiimote(self):
 		connected = False
 		while not connected:
 			self.blinky(5,0.4)
@@ -97,13 +99,13 @@ class Skateboard(object):
 			time.sleep(0.5)
 			if Skateboard.accel_sleep >= 0.1:
 				Skateboard.accel_sleep = 0.1
-			print(Skateboard.accel_sleep)
+			self.logger.info(Skateboard.accel_sleep)
 		if (self.buttons & cwiid.BTN_MINUS):
 			Skateboard.accel_sleep -= 0.005
 			time.sleep(0.5)
 			if Skateboard.accel_sleep <= 0:
 				Skateboard.accel_sleep = 0
-			print(Skateboard.accel_sleep)
+			self.logger.info(Skateboard.accel_sleep)
 
 	@timeout(0.4)
 	def get_status(self):
@@ -112,19 +114,23 @@ class Skateboard(object):
 
 	
 ### Main Program ###
-
-skate = Skateboard()
-skate.blinky(20,0.05)
-skate.connection_process()
-while True:
-	try:
-		skate.run_process()
-#		print(skate.speed)
-	except KeyboardInterrupt:
-		raise
-	except:
-		skate.speed = 1500
-		if is_debug:
+def main():
+	logger = logging.getLogger("SKATEBOARD")
+	skate = Skateboard(logger)
+	skate.blinky(20,0.05)
+	skate.connect_wiimote()
+	while True:
+		try:
+			skate.run_process()
+		except KeyboardInterrupt:
 			raise
-		else:
-			os.system("poweroff")
+		except Exception as e:
+			logger.exception(str(e))
+			skate.speed = 1500
+			if is_debug:
+				raise
+			else:
+				os.system("poweroff")
+
+if __name__ == '__main__':
+	main()
