@@ -17,3 +17,5 @@ By far the most popular question I have had is "what are the parts you used for 
 |4 x Alien 83mm longboard wheels   |http://alienpowersystem.com/shop/cnc-kit/alien-power-wheel-83mm-78a/      |
 |Zealous longboard bearings   |https://www.skatepro.uk/262-19587.htm?stockcode=ZEALOUSBEARING8PACK&gclid=CjwKEAiAyO_BBRDOgM-K8MGWpmYSJACePQ9CE6uxgwPRbQ5KgseXNzKhhDF9gRN__eR0LN3BPsEBchoCKJbw_wcB       |
 |Wires (used to connect all parts of the board): various XT60 connectors  |https://hobbyking.com/en_us/catalogsearch/result/?q=XT60+WIRE       |
+|Controller: Bluetooth Wiimote   |http://www.ebay.co.uk/itm/Official-Genuine-Nintendo-Wii-Controller-Wiimote-Remote-and-Nunchuck-White-/272457206658?hash=item3f6fb70b82:g:NmQAAOSwImRYON7N       |
+|Housing: 2 x EVA78 boxes   |http://cpc.farnell.com/evatron/eva78-grey/multipurpose-enclosure-grey-220x145x50mm/dp/EN84718?CMP=TREML007-005       |
