@@ -10,6 +10,7 @@ By far the most popular question I have had is "what are the parts you used for 
 
 |Part                         |Link                                                                                    |
 |---                          |---                                                                                     |
+|Raspberry Pi Zero   |https://thepihut.com/products/raspberry-pi-zero?variant=14062715972       |
 |Deck: Holesom Stardust   |https://www.sickboards.nl/en/all-deck-only-s/3022-holesom-stardust-deck-only.html       |
 |Trucks: Caliber IIs       |https://www.skatedeluxe.com/en/caliber-ii-50o-184mm-truck-satin-gold_p78988?cic=GB&utm_source=google&utm_campaign=uk&gclid=CjwKEAiAyO_BBRDOgM-K8MGWpmYSJACePQ9CuKaV0f2aV29d-r79zGjoAlBOdZi6tL7oovJ8lf8MdxoCvefw_wcB                                                                                        |
 |2.2KW brushless motor, ESC, battery and charger                         |http://alienpowersystem.com/shop/e-board-kits/aps-120amp-2-2kw-6s-single-motor-e-board-diy-kit/                                                                                        |
@@ -19,3 +20,4 @@ By far the most popular question I have had is "what are the parts you used for 
 |Wires (used to connect all parts of the board): various XT60 connectors  |https://hobbyking.com/en_us/catalogsearch/result/?q=XT60+WIRE       |
 |Controller: Bluetooth Wiimote   |http://www.ebay.co.uk/itm/Official-Genuine-Nintendo-Wii-Controller-Wiimote-Remote-and-Nunchuck-White-/272457206658?hash=item3f6fb70b82:g:NmQAAOSwImRYON7N       |
 |Housing: 2 x EVA78 boxes   |http://cpc.farnell.com/evatron/eva78-grey/multipurpose-enclosure-grey-220x145x50mm/dp/EN84718?CMP=TREML007-005       |
+|Raspberry Pi Power: Buck 5v converter   |https://ryanteck.uk/power/16-dc-to-dc-stepdown-regulator-with-4aa-battery-box-0635648607214.html?search_query=buck&results=7       |
