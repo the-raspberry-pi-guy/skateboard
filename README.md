@@ -11,5 +11,5 @@ By far the most popular question I have had is "what are the parts you used for 
 |Part                     |Link                                                                                    |
 |---                      |---                                                                                     |
 |Deck: Holesom Stardust   |https://www.sickboards.nl/en/all-deck-only-s/3022-holesom-stardust-deck-only.html       |
-|                         |                                                                                        |
+|Trucks: Caliber II       |https://www.skatedeluxe.com/en/caliber-ii-50o-184mm-truck-satin-gold_p78988?cic=GB&utm_source=google&utm_campaign=uk&gclid=CjwKEAiAyO_BBRDOgM-K8MGWpmYSJACePQ9CuKaV0f2aV29d-r79zGjoAlBOdZi6tL7oovJ8lf8MdxoCvefw_wcB                                                                                        |
 |                         |                                                                                        |
