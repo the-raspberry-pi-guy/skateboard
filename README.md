@@ -16,3 +16,4 @@ By far the most popular question I have had is "what are the parts you used for 
 |50mm motor transmission kit   |http://alienpowersystem.com/shop/cnc-kit/alien-drive-complete-kits/alien-drive-systems-electric-longboard-diy-kit-50mm-motor/       |
 |4 x Alien 83mm longboard wheels   |http://alienpowersystem.com/shop/cnc-kit/alien-power-wheel-83mm-78a/      |
 |Zealous longboard bearings   |https://www.skatepro.uk/262-19587.htm?stockcode=ZEALOUSBEARING8PACK&gclid=CjwKEAiAyO_BBRDOgM-K8MGWpmYSJACePQ9CE6uxgwPRbQ5KgseXNzKhhDF9gRN__eR0LN3BPsEBchoCKJbw_wcB       |
+|Wires (used to connect all parts of the board): various XT60 connectors  |https://hobbyking.com/en_us/catalogsearch/result/?q=XT60+WIRE       |
