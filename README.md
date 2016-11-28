@@ -8,8 +8,8 @@ This project has (to my surprise!) been featured all around the net: including P
 
 By far the most popular question I have had is "what are the parts you used for this project?". I have compiled a list below of the exact things I used, however it is worth noting that you can find these components elsewhere at a wide range of prices. I went for these (and kinda splurged) due to convenience of shipping, quality of product and project deadlines. Electric skateboards are infinitely  configurable - just because I made my one *this way*, does not mean that it is the only way (or even the correct way)
 
-| Part  | Link  |
-|---    |---    |
-|Deck   |       |
-|       |       |
-|       |       |
+|Part                     |Link                                                                                    |
+|---                      |---                                                                                     |
+|Deck: Holesom Stardust   |https://www.sickboards.nl/en/all-deck-only-s/3022-holesom-stardust-deck-only.html       |
+|                         |                                                                                        |
+|                         |                                                                                        |
