@@ -11,5 +11,8 @@ By far the most popular question I have had is "what are the parts you used for 
 |Part                     |Link                                                                                    |
 |---                      |---                                                                                     |
 |Deck: Holesom Stardust   |https://www.sickboards.nl/en/all-deck-only-s/3022-holesom-stardust-deck-only.html       |
-|Trucks: Caliber II       |https://www.skatedeluxe.com/en/caliber-ii-50o-184mm-truck-satin-gold_p78988?cic=GB&utm_source=google&utm_campaign=uk&gclid=CjwKEAiAyO_BBRDOgM-K8MGWpmYSJACePQ9CuKaV0f2aV29d-r79zGjoAlBOdZi6tL7oovJ8lf8MdxoCvefw_wcB                                                                                        |
+|Trucks: Caliber IIs       |https://www.skatedeluxe.com/en/caliber-ii-50o-184mm-truck-satin-gold_p78988?cic=GB&utm_source=google&utm_campaign=uk&gclid=CjwKEAiAyO_BBRDOgM-K8MGWpmYSJACePQ9CuKaV0f2aV29d-r79zGjoAlBOdZi6tL7oovJ8lf8MdxoCvefw_wcB                                                                                        |
 |2.2KW brushless motor, ESC, battery and charger                         |http://alienpowersystem.com/shop/e-board-kits/aps-120amp-2-2kw-6s-single-motor-e-board-diy-kit/                                                                                        |
+|50mm motor transmission kit   |http://alienpowersystem.com/shop/cnc-kit/alien-drive-complete-kits/alien-drive-systems-electric-longboard-diy-kit-50mm-motor/       |
+|4 x Alien 83mm longboard wheels   |http://alienpowersystem.com/shop/cnc-kit/alien-power-wheel-83mm-78a/      |
+|Zealous longboard bearings   |https://www.skatepro.uk/262-19587.htm?stockcode=ZEALOUSBEARING8PACK&gclid=CjwKEAiAyO_BBRDOgM-K8MGWpmYSJACePQ9CE6uxgwPRbQ5KgseXNzKhhDF9gRN__eR0LN3BPsEBchoCKJbw_wcB       |
