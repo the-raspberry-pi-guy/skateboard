@@ -11,6 +11,7 @@ import time
 import cwiid
 import os
 import sys
+import threading
 
 from timeout import timeout, TimeoutError
 
@@ -138,22 +139,24 @@ class Skateboard(object):
 		self.buttons = self.wii.state['buttons']
 		self.status_button = not pi.read(Skateboard.button)
 
-	
-### Main Program ###
 
-# Class instance and program run
-skate = Skateboard()
-skate.blinky(20,0.05)
-skate.connection_process()
-while True:
-	try:
-		skate.run_process()
-#		print(skate.speed)
-	except KeyboardInterrupt:
-		raise
-	except:
-		skate.speed = 1500
-		if is_debug:
+def main():
+	# Class instance and program run
+	skate = Skateboard()
+	skate.blinky(20,0.05)
+	skate.connection_process()
+	while True:
+		try:
+			skate.run_process()
+#			print(skate.speed)
+		except KeyboardInterrupt:
 			raise
-		else:
-			os.system("poweroff")
+		except:
+			skate.speed = 1500
+			if is_debug:
+				raise
+			else:
+				os.system("poweroff")
+
+if __name__ == "__main__":
+	main()
