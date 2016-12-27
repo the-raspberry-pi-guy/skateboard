@@ -26,6 +26,9 @@ lights_off = 16
 wiimote_bluetooth = "00:1F:C5:86:3E:85"
 powerdown = ["sudo", "shutdown", "now"]
 
+global stop_val
+stop_val = False
+
 class Skateboard(object):
 	""" An all-powerful skateboard controller """
 
@@ -106,35 +109,37 @@ class Skateboard(object):
 	# Controller-skateboard interface
 	def run_process(self):
 		pi.write(led, 1)
-		self.get_status()
-		if self.status_button:
-			self.wii.rumble=1
-			time.sleep(2)
-			self.wii.rumble=0
-			raise RuntimeError("Status Button")
+		while (stop_val == False):
+			self.get_status()
+			if self.status_button:
+				self.wii.rumble=1
+				time.sleep(2)
+				self.wii.rumble=0
+				raise RuntimeError("Status Button")
 		
-		if (self.buttons & cwiid.BTN_A):
-			self.arduino_trigger()
+			if (self.buttons & cwiid.BTN_A):
+				self.arduino_trigger()
 				
-		if (self.buttons & cwiid.BTN_B):
-			self.speed = 1500
-			time.sleep(0.5)
-		if (self.buttons & cwiid.BTN_DOWN):
-			self.speed += 1
-		if (self.buttons & cwiid.BTN_UP):
-			self.speed -= 1
-		if (self.buttons & cwiid.BTN_PLUS):
-			Skateboard.accel_sleep += 0.005
-			time.sleep(0.5)
-			if Skateboard.accel_sleep >= 0.1:
-				Skateboard.accel_sleep = 0.1
-			print(Skateboard.accel_sleep)
-		if (self.buttons & cwiid.BTN_MINUS):
-			Skateboard.accel_sleep -= 0.005
-			time.sleep(0.5)
-			if Skateboard.accel_sleep <= 0:
-				Skateboard.accel_sleep = 0
-			print(Skateboard.accel_sleep)
+			if (self.buttons & cwiid.BTN_B):
+				self.speed = 1500
+				time.sleep(0.5)
+			if (self.buttons & cwiid.BTN_DOWN):
+				self.speed += 1
+			if (self.buttons & cwiid.BTN_UP):
+				self.speed -= 1
+			if (self.buttons & cwiid.BTN_PLUS):
+				Skateboard.accel_sleep += 0.005
+				time.sleep(0.5)
+				if Skateboard.accel_sleep >= 0.1:
+					Skateboard.accel_sleep = 0.1
+				print(Skateboard.accel_sleep)
+			if (self.buttons & cwiid.BTN_MINUS):
+				Skateboard.accel_sleep -= 0.005
+				time.sleep(0.5)
+				if Skateboard.accel_sleep <= 0:
+					Skateboard.accel_sleep = 0
+				print(Skateboard.accel_sleep)
+		self.speed = 1500
 
 	@timeout(0.4)
 	def get_status(self):
@@ -156,11 +161,12 @@ class wiimote_watcher(threading.Thread):
         	command = subprocess.Popen(wiimote_watcher.bluetooth_ping, stdout=subprocess.PIPE).communicate()[0]
         	return command
 
-	def motor_off(self,pin):
-        	pi.set_servo_pulsewidth(pin, 1500)
+	def motor_off(self):
+        	stop_val = True
+		print stop_val
 
 	def shutdown(self):
-		self.motor_off(motor)
+		self.motor_off()
         	if is_debug:
 			print "EEK"
 		else:
