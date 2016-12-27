@@ -6,12 +6,9 @@
 import pigpio
 import time
 import cwiid
-import os
 import sys
 import threading
 import subprocess
-
-from timeout import timeout, TimeoutError
 
 pi = pigpio.pi()
 is_debug = "debug" in sys.argv
@@ -26,7 +23,6 @@ lights_off = 16
 wiimote_bluetooth = "00:1F:C5:86:3E:85"
 powerdown = ["sudo", "shutdown", "now"]
 
-global stop_val
 stop_val = False
 
 class Skateboard(object):
@@ -108,6 +104,7 @@ class Skateboard(object):
 
 	# Controller-skateboard interface
 	def run_process(self):
+		global stop_val
 		pi.write(led, 1)
 		while (stop_val == False):
 			self.get_status()
@@ -139,9 +136,8 @@ class Skateboard(object):
 				if Skateboard.accel_sleep <= 0:
 					Skateboard.accel_sleep = 0
 				print(Skateboard.accel_sleep)
-		self.speed = 1500
+		self.speed = 1500 #If the board defaults, set the speed to neutral
 
-	@timeout(0.4)
 	def get_status(self):
 		self.buttons = self.wii.state['buttons']
 		self.status_button = not pi.read(button)
@@ -156,19 +152,18 @@ class wiimote_watcher(threading.Thread):
 			self.wiimote_check()
 			time.sleep(0.1)
 
-#	@timeout(2)
 	def try_comms(self):
         	command = subprocess.Popen(wiimote_watcher.bluetooth_ping, stdout=subprocess.PIPE).communicate()[0]
         	return command
 
 	def motor_off(self):
-        	stop_val = True
-		print stop_val
+		global stop_val
+        	stop_val = True # Causes main thread loop to stop working and speed to default
 
 	def shutdown(self):
 		self.motor_off()
         	if is_debug:
-			print "EEK"
+			print "OFF"
 		else:
 			subprocess.call(powerdown)
 
@@ -176,9 +171,9 @@ class wiimote_watcher(threading.Thread):
 		try:
 			output = self.try_comms()
 			print output
-			if (("100% loss") in output) or (output == ""):
+			if (("100% loss") in output) or (output == ""): # If 100% packets lost: wiimote died. If output is null: bluetooth dongle died
 				self.shutdown()
-		except TimeoutError:
+		except:
 			self.shutdown()			
 
 ###
@@ -192,18 +187,16 @@ def main():
 	checker = wiimote_watcher()
 	checker.daemon = True
 	checker.start()
-	while True:
-		try:
-			skate.run_process()
-#			print(skate.speed)
-		except KeyboardInterrupt:
+	try:
+		skate.run_process()
+	except KeyboardInterrupt:
+		raise
+	except:
+		skate.speed = 1500
+		if is_debug:
 			raise
-		except:
-			skate.speed = 1500
-			if is_debug:
-				raise
-			else:
-				subprocess.call(powerdown)
+		else:
+			subprocess.call(powerdown)
 
 if __name__ == "__main__":
 	main()
