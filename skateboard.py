@@ -1,10 +1,7 @@
 # skateboard.py
 # DIY Electric Skateboard
 # Created by Matthew Timmons-Brown, The Raspberry Pi Guy
-# Matt's safety procedures were designed and coded by Simon Beal.
-# If I die, it is his fault
-# Simon accepts no responsibility for any damage caused by the use of this program
-# to the extent allowed by UK law
+# Simon Beal assisted with the development of this program - if I die, it is his fault.
 
 import pigpio
 import time
@@ -12,22 +9,27 @@ import cwiid
 import os
 import sys
 import threading
+import subprocess
 
 from timeout import timeout, TimeoutError
 
 pi = pigpio.pi()
 is_debug = "debug" in sys.argv
 
+# Global constants
+motor = 18
+led = 17
+button = 27
+lights_on = 26
+lights_off = 16
+
+wiimote_bluetooth = "00:1F:C5:86:3E:85"
+powerdown = ["sudo", "shutdown", "now"]
+
 class Skateboard(object):
-	"""An all-powerful skateboard controller"""
+	""" An all-powerful skateboard controller """
 
 	# Constants for values used by class
-	motor = 18
-	led = 17
-	button = 27
-	lights_on = 26
-	lights_off = 16
-
 	min_speed = 1720
 	max_speed = 1100
 
@@ -38,14 +40,14 @@ class Skateboard(object):
 
 	# Initial setup of pins and various values
 	def __init__(self):
-		pi.set_PWM_frequency(Skateboard.motor, 50)
-		pi.set_mode(Skateboard.led, pigpio.OUTPUT)
-		pi.set_mode(Skateboard.button, pigpio.INPUT)
-		pi.set_mode(Skateboard.lights_on, pigpio.OUTPUT)
-		pi.set_mode(Skateboard.lights_off, pigpio.OUTPUT)
-		pi.set_pull_up_down(Skateboard.button, pigpio.PUD_UP)
+		pi.set_PWM_frequency(motor, 50)
+		pi.set_mode(led, pigpio.OUTPUT)
+		pi.set_mode(button, pigpio.INPUT)
+		pi.set_mode(lights_on, pigpio.OUTPUT)
+		pi.set_mode(lights_off, pigpio.OUTPUT)
+		pi.set_pull_up_down(button, pigpio.PUD_UP)
 		self.__speed = 1500
-		self.speed=1500
+		self.speed = 1500
 
 	@property
 	def speed(self):
@@ -58,29 +60,29 @@ class Skateboard(object):
 		while abs(value-self.__speed) > Skateboard.servo_smooth:
 			direction = cmp(value, self.__speed)
 			self.__speed += direction * Skateboard.servo_smooth
-			pi.set_servo_pulsewidth(Skateboard.motor, self.__speed)
+			pi.set_servo_pulsewidth(motor, self.__speed)
 			time.sleep(Skateboard.smooth_sleep)
-		pi.set_servo_pulsewidth(Skateboard.motor, value)		
+		pi.set_servo_pulsewidth(motor, value)		
 		self.__speed = value
 		time.sleep(Skateboard.accel_sleep)
 	
 	# Blinks the ring LED of the power button on electric skateboard
 	def blinky(self,times,period):
 		for i in range (1,times):
-			pi.write(self.led,1)
+			pi.write(led,1)
 			time.sleep(period)
-			pi.write(self.led,0)
+			pi.write(led,0)
 			time.sleep(period)
 
 	# Toggles an Arduino that toggles the neopixels on the bottom of the electric skateboard
 	def arduino_trigger(self):
 		if Skateboard.indicator_lights_on == 0:
-			pi.write(Skateboard.lights_on,1)
+			pi.write(lights_on,1)
 			Skateboard.indicator_lights_on = 1
 			self.wii.led = 15
 		elif Skateboard.indicator_lights_on == 1:
-			pi.write(Skateboard.lights_off,1)
-			pi.write(Skateboard.lights_on,0)
+			pi.write(lights_off,1)
+			pi.write(lights_on,0)
 			Skateboard.indicator_lights_on = 0
 			self.wii.led = 0
 		time.sleep(0.5) # Let's hope I don't activate this whilst on the board and die from this half second delay
@@ -91,7 +93,7 @@ class Skateboard(object):
 		while not connected:
 			self.blinky(5,0.4)
 			try:
-				self.wii = cwiid.Wiimote(bdaddr="00:1F:C5:86:3E:85")
+				self.wii = cwiid.Wiimote(bdaddr = wiimote_bluetooth)
 				connected = True
 				self.blinky(40,0.03)
 				self.wii.rpt_mode = cwiid.RPT_BTN
@@ -103,7 +105,7 @@ class Skateboard(object):
 
 	# Controller-skateboard interface
 	def run_process(self):
-		pi.write(self.led, 1)
+		pi.write(led, 1)
 		self.get_status()
 		if self.status_button:
 			self.wii.rumble=1
@@ -137,14 +139,52 @@ class Skateboard(object):
 	@timeout(0.4)
 	def get_status(self):
 		self.buttons = self.wii.state['buttons']
-		self.status_button = not pi.read(Skateboard.button)
+		self.status_button = not pi.read(button)
 
+class wiimote_watcher(threading.Thread):
+	""" A wiimote checking thread class """
+
+	bluetooth_ping = ["sudo", "l2ping", "-c", "1", "-t", "1", wiimote_bluetooth]
+		
+	def run(self):
+		self.wiimote_check()
+
+	@timeout(2)
+	def try_comms(self):
+        	command = subprocess.Popen(wiimote_watcher.bluetooth_ping, stdout=subprocess.PIPE).communicate()[0]
+        	return command
+
+	def motor_off(self,pin):
+        	pi.set_servo_pulsewidth(pin, 1500)
+
+	def shutdown(self):
+		wiimote_watcher.motor_off(motor)
+        	if is_debug:
+			raise
+		else:
+			subprocess.call(powerdown)
+
+	def wiimote_check(self):
+		try:
+			output = self.try_comms()
+			print output
+			if (("100% loss") in output) or (output == ""):
+				wiimote_watcher.shutdown()
+			time.sleep(0.2)
+		except TimeoutError:
+			wiimote_watcher.shutdown()			
+
+###
 
 def main():
 	# Class instance and program run
 	skate = Skateboard()
 	skate.blinky(20,0.05)
 	skate.connection_process()
+	# Wiimote checker thread
+	checker = wiimote_watcher()
+	checker.daemon = True
+	checker.start()
 	while True:
 		try:
 			skate.run_process()
@@ -156,7 +196,7 @@ def main():
 			if is_debug:
 				raise
 			else:
-				os.system("poweroff")
+				subprocess.call(powerdown)
 
 if __name__ == "__main__":
 	main()
