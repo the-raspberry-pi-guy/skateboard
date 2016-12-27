@@ -35,7 +35,7 @@ class Skateboard(object):
 
 	servo_smooth = 2
 	smooth_sleep = 0.005
-	accel_sleep = 0.02
+	accel_sleep = 0.015
 	indicator_lights_on = 0
 
 	# Initial setup of pins and various values
@@ -147,9 +147,11 @@ class wiimote_watcher(threading.Thread):
 	bluetooth_ping = ["sudo", "l2ping", "-c", "1", "-t", "1", wiimote_bluetooth]
 		
 	def run(self):
-		self.wiimote_check()
+		while True:
+			self.wiimote_check()
+			time.sleep(0.1)
 
-	@timeout(2)
+#	@timeout(2)
 	def try_comms(self):
         	command = subprocess.Popen(wiimote_watcher.bluetooth_ping, stdout=subprocess.PIPE).communicate()[0]
         	return command
@@ -158,9 +160,9 @@ class wiimote_watcher(threading.Thread):
         	pi.set_servo_pulsewidth(pin, 1500)
 
 	def shutdown(self):
-		wiimote_watcher.motor_off(motor)
+		self.motor_off(motor)
         	if is_debug:
-			raise
+			print "EEK"
 		else:
 			subprocess.call(powerdown)
 
@@ -169,10 +171,9 @@ class wiimote_watcher(threading.Thread):
 			output = self.try_comms()
 			print output
 			if (("100% loss") in output) or (output == ""):
-				wiimote_watcher.shutdown()
-			time.sleep(0.2)
+				self.shutdown()
 		except TimeoutError:
-			wiimote_watcher.shutdown()			
+			self.shutdown()			
 
 ###
 
