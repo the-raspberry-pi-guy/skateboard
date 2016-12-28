@@ -41,7 +41,7 @@ void ISRturn_off(){
   }
 
 void colorWipe(uint32_t c, uint8_t wait) {
-  for(uint16_t i=0; i<strip.numPixels(); i++) {
+  for(int i = (strip.numPixels()-1); i >= 0; i = i - 1) {
     strip.setPixelColor(i, c);
     strip.show();
     delay(wait);
