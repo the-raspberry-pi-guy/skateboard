@@ -4,7 +4,7 @@ Over the summer, I made my own electric skateboard using a £4 Raspberry Pi Zero
 
 This project has (to my surprise!) been featured all around the net: including Popular Mechanics, Hackaday and the BBC. This Github repo contains *all* of the code that I use to make my DIY electric skateboard purr.
 
-## Where did you get all the parts, for God's sake man - give me a damn parts list?!
+## Parts List (Some links may now be dead)
 
 By far the most popular question I have had is "what are the parts you used for this project?". I have compiled a list below of the exact things I used, however it is worth noting that you can find these components elsewhere at a wide range of prices. I went for these (and kinda splurged) due to convenience of shipping, quality of product and project deadlines. Electric skateboards are infinitely  configurable - just because I made my one *this way*, does not mean that it is the only way (or even the correct way)
 
